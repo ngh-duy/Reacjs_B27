@@ -37,12 +37,18 @@ export default function CardProduct(props) {
             getProductCount.push(count);
             localStorage.setItem('productCount', JSON.stringify(getProductCount));
         }
-
+        if (props.onCartChange) props.onCartChange();
     }
 
     return (
         <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-            <a href="#" data-modal-target="crud-modal" data-modal-toggle="crud-modal">
+            <a
+                href="#"
+                onClick={e => {
+                    e.preventDefault();
+                    if (props.onImageClick) props.onImageClick(product);
+                }}
+            >
                 <img className="p-8 rounded-t-lg" src={product.image} alt="product image" />
             </a>
             <div className="px-5 pb-5">

@@ -1,7 +1,14 @@
 import React from 'react'
 
-export default function Drawer() {
-   
+export default function Drawer({ cartVersion }) {
+    const [products, setProducts] = React.useState([]);
+    const [counts, setCounts] = React.useState([]);
+
+    React.useEffect(() => {
+        setProducts(JSON.parse(localStorage.getItem("productShoping")) || []);
+        setCounts(JSON.parse(localStorage.getItem("productCount")) || []);
+    }, [cartVersion]);
+
     const addCountProduct = (id) => {
         const getProductCount = JSON.parse(localStorage.getItem("productCount")) || [];
         const findProduct = getProductCount.findIndex(product => {
@@ -9,7 +16,7 @@ export default function Drawer() {
         })
         getProductCount[findProduct].count += 1;
         localStorage.setItem('productCount', JSON.stringify(getProductCount));
-        renderProductShoping();
+        setCounts([...getProductCount]);
     }
     const deleteProduct = (id) => {
         const getProductCount = JSON.parse(localStorage.getItem("productCount")) || [];
@@ -27,8 +34,9 @@ export default function Drawer() {
             })
             localStorage.setItem('productCount', JSON.stringify(existProductCount));
             localStorage.setItem('productShoping', JSON.stringify(existProduct));
+            setProducts([...existProduct]);
+            setCounts([...existProductCount]);
         }
-        renderProductShoping();
     }
     const subtractCountProduct = (id) => {
         const getProductCount = JSON.parse(localStorage.getItem("productCount")) || [];
@@ -47,14 +55,15 @@ export default function Drawer() {
             })
             localStorage.setItem('productCount', JSON.stringify(existProductCount));
             localStorage.setItem('productShoping', JSON.stringify(existProduct));
+            setProducts([...existProduct]);
+            setCounts([...existProductCount]);
+        } else {
+            setCounts([...getProductCount]);
         }
-        renderProductShoping();
     }
     const renderProductShoping = () => {
-        const product = JSON.parse(localStorage.getItem("productShoping")) || [];
-        const getProductCount = JSON.parse(localStorage.getItem("productCount")) || [];
-        return product.map(product => {
-            const findCount = getProductCount.find(productCount => {
+        return products.map(product => {
+            const findCount = counts.find(productCount => {
                 return productCount.id === product.id;
             })
             return (
@@ -67,7 +76,7 @@ export default function Drawer() {
                     </td>
                     <td className="px-2 py-2 flex justify-between">
                         <button onClick={() => addCountProduct(product.id)}><i className="fa-solid fa-plus"></i></button>
-                        <h1 className='mx-2'>{findCount.count}</h1>
+                        <h1 className='mx-2'>{findCount?.count || 0}</h1>
                         <button onClick={() => subtractCountProduct(product.id)}><i className="fa-solid fa-minus"></i></button>
                     </td>
                     <td>

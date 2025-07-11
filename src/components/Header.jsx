@@ -1,6 +1,6 @@
 import React from 'react'
 import Drawer from './Drawer'
-export default function Header() {
+export default function Header({ cartVersion }) {
     return (
         <>
             <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -37,7 +37,7 @@ export default function Header() {
                 </div>
             </nav>
             {/* drawer component */}
-            <Drawer/>
+            <Drawer cartVersion={cartVersion}/>
 
         </>
     )
